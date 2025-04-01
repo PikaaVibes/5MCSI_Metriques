@@ -17,9 +17,9 @@
         const dataTable = new google.visualization.DataTable();
         dataTable.addColumn("number", "Température (°C)");
 
-        // On remplit juste les températures (sans dates) pour un histogramme
-        data.results.forEach(entry => {
-          const tempCelsius = Math.round(entry.temp - 273.15); // Kelvin → Celsius
+        // ⚠️ Correction ici : utilisation de entry.main.temp
+        data.list.forEach(entry => {
+          const tempCelsius = Math.round(entry.main.temp - 273.15);
           dataTable.addRow([tempCelsius]);
         });
 
