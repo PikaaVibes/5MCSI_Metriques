@@ -11,8 +11,8 @@ app = Flask(__name__)
 def MaPremiereAPI():
     return "<h2>Ma page de contact</h2>"
 
-@app.route("/contact/")
-def page_contact():
+@app.route("/contacte/")
+def page_contacte():
     return render_template("contact.html")
 
 @app.route("/rapport/")
