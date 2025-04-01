@@ -1,14 +1,14 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>Histogramme des températures</title>
+    <title>Histogramme Températures</title>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
       google.charts.load("current", { packages: ["corechart"] });
       google.charts.setOnLoadCallback(fetchData);
 
       function fetchData() {
-        fetch("/tawarano/")
+        fetch('/tawarano/')
           .then(response => response.json())
           .then(data => drawChart(data));
       }
@@ -16,25 +16,35 @@
       function drawChart(data) {
         var dataTable = new google.visualization.DataTable();
         dataTable.addColumn('string', 'Date');
-        dataTable.addColumn('number', 'Température');
+        dataTable.addColumn('number', 'Température (°C)');
 
-        data.results.forEach(entry => {
-          var date = new Date(entry.Jour * 1000).toLocaleDateString();
-          dataTable.addRow([date, entry.temp]);
+        data.list.forEach(entry => {
+          const date = entry.dt_txt;
+          const tempCelsius = (entry.main.temp - 273.15).toFixed(2); // Conversion Kelvin -> °C
+          dataTable.addRow([date, parseFloat(tempCelsius)]);
         });
 
-        var options = {
-          title: "Évolution des températures de la ville de Tawarano",
+        const options = {
+          title: "Histogramme des températures (°C) - Ville de Tawarano",
           legend: { position: "none" },
-          colors: ['#4285F4']
+          colors: ["#3366cc"],
+          hAxis: {
+            title: "Date/Heure",
+            slantedText: true,
+            slantedTextAngle: 45,
+            showTextEvery: 4
+          },
+          vAxis: {
+            title: "Température (°C)"
+          }
         };
 
-        var chart = new google.visualization.Histogram(document.getElementById("chart_div"));
+        const chart = new google.visualization.Histogram(document.getElementById("chart_div"));
         chart.draw(dataTable, options);
       }
     </script>
   </head>
   <body>
-    <div id="chart_div" style="width: 900px; height: 500px;"></div>
+    <div id="chart_div" style="width: 1000px; height: 500px;"></div>
   </body>
 </html>
